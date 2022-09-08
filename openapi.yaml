@@ -13,12 +13,63 @@ paths:
     post:
       tags:
         - Face API
-      summary: calculates facial check score
+      summary: calculates facial check score asynchronously
       operationId: scoreFacialCheck
+      description: Calculates Facial Check scores depending on the requested components, and calls a webhook to post the result when it is done.
+      responses:
+        '201': 
+          description: Scoring job created
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              required: 
+                - callback_url
+              properties:
+                callback_url:
+                  type: string
+                  format: uri
+                  example: "https://some-backend-server.example.com/facial-check-webhook"
+      callbacks:
+        scoringSuccessful:
+          '{$request.body#/callback_url}':
+            post:
+              description: "Facial check scoring job successful"
+              requestBody:
+                required: true
+                content:
+                  application/json:
+                    schema:
+                      $ref: '#/components/schemas/FacialCheckSuccessResponse'
+              responses:
+                '200': 
+                  description: "Your callback returns HTTP 200"
+        scoringFailed:
+          '{$request.body#/callback_url}':
+            post:
+              description: "Facial check scoring job failed"
+              requestBody:
+                required: true
+                content:
+                  application/json:
+                    schema:
+                      $ref: '#/components/schemas/FacialCheckErrorResponse'
+              responses:
+                '200': 
+                  description: "Your callback returns HTTP 200"
+          
+          
+  /face/score/sync:
+    post:
+      tags:
+        - Face API
+      summary: calculates facial check score synchronously
+      operationId: scoreFacialCheckSync
       description: Calculates Facial Check scores depending on the requested components
       responses:
         '200':
-          description: item created
+          description: scoring completed
           content:
             application/json:
               schema:
@@ -66,8 +117,6 @@ components:
           items:
             type: string
             enum:
-              # - undertone
-              # - foundation
               - dark_circle
               - darkspot
               - acne
@@ -75,12 +124,17 @@ components:
               - redness
               - oiliness
               # - face_shape
+              # - undertone
+              # - foundation
               # - texture_area
     FacialCheckSuccessResponse:
       type: object
       required: 
-        - prediction
+        - success
       properties:
+        success:
+          type: boolean
+          default: true
         prediction:
           type: object
           properties:
@@ -96,6 +150,8 @@ components:
               $ref: '#/components/schemas/FacialCheckRednessComponent'
             oiliness:
               $ref: '#/components/schemas/FacialCheckOilinessComponent'
+            # face_shape:
+            #   $ref: '#/components/schemas/FacialCheckFaceShapeComponent'
             # undertone:
             #   $ref: '#/components/schemas/FacialCheckUndertoneComponent'
             # foundation:
@@ -104,9 +160,12 @@ components:
             #   $ref: '#/components/schemas/FacialCheckTextureAreaComponent'
     FacialCheckErrorResponse:
       type: object
-      required:
-        - error
+      required: 
+        - success
       properties:
+        success:
+          type: boolean
+          default: false
         error:
           type: string
           enum:
@@ -144,6 +203,19 @@ components:
     FacialCheckDarkCircleComponent: *numericComponent
     FacialCheckRednessComponent: *numericComponent
     FacialCheckOilinessComponent: *numericComponent
+    FacialCheckFaceShapeComponent:
+      type: object
+      required: 
+        - class
+      properties:
+        class:
+          type: string
+          enum: 
+            - "HEART"
+            - "OBLONG"
+            - "OVAL"
+            - "ROUND"
+            - "SQUARE"
     FacialCheckUndertoneComponent:
       type: object
       required: 
