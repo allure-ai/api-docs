@@ -62,20 +62,20 @@ components:
           example: true
         components:
           type: array
-          example: ["undertone", "acne"]
+          example: ["wrinkle", "acne"]
           items:
             type: string
             enum:
-              - undertone
-              - foundation
+              # - undertone
+              # - foundation
               - dark_circle
               - darkspot
               - acne
               - wrinkle
               - redness
               - oiliness
-              - face_shape
-              - texture_area
+              # - face_shape
+              # - texture_area
     FacialCheckSuccessResponse:
       type: object
       required: 
@@ -96,12 +96,12 @@ components:
               $ref: '#/components/schemas/FacialCheckRednessComponent'
             oiliness:
               $ref: '#/components/schemas/FacialCheckOilinessComponent'
-            undertone:
-              $ref: '#/components/schemas/FacialCheckUndertoneComponent'
-            foundation:
-              $ref: '#/components/schemas/FacialCheckFoundationComponent'
-            texture_area:
-              $ref: '#/components/schemas/FacialCheckTextureAreaComponent'
+            # undertone:
+            #   $ref: '#/components/schemas/FacialCheckUndertoneComponent'
+            # foundation:
+            #   $ref: '#/components/schemas/FacialCheckFoundationComponent'
+            # texture_area:
+            #   $ref: '#/components/schemas/FacialCheckTextureAreaComponent'
     FacialCheckErrorResponse:
       type: object
       required:
