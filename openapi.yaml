@@ -23,14 +23,16 @@ paths:
         content:
           application/json:
             schema:
-              type: object
-              required: 
-                - callback_url
-              properties:
-                callback_url:
-                  type: string
-                  format: uri
-                  example: "https://some-backend-server.example.com/facial-check-webhook"
+              allOf:
+                - $ref: '#/components/schemas/FacialCheckRequest'
+                - type: object
+                  required: 
+                    - callback_url
+                  properties:
+                    callback_url:
+                      type: string
+                      format: uri
+                      example: "https://some-backend-server.example.com/facial-check-webhook"
       callbacks:
         scoringSuccessful:
           '{$request.body#/callback_url}':
