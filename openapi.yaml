@@ -9,7 +9,7 @@ info:
   contact:
     email: admin@allure.id
 paths:
-  /face/score:
+  /facial-check/v1/predict:
     post:
       tags:
         - Face API
