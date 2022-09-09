@@ -62,36 +62,36 @@ paths:
                   description: "Your callback returns HTTP 200"
           
           
-  /face/score/sync:
-    post:
-      tags:
-        - Face API
-      summary: calculates facial check score synchronously
-      operationId: scoreFacialCheckSync
-      description: Calculates Facial Check scores depending on the requested components
-      responses:
-        '200':
-          description: scoring completed
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/FacialCheckSuccessResponse'
-        '400':
-          description: photo quality is insufficient
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/FacialCheckErrorResponse'
-        '403':
-          description: 'client is forbidden to access this API or requested components'
-        '500':
-          description: internal server error
-      requestBody:
-        content:
-          application/json:
-            schema:
-              $ref: '#/components/schemas/FacialCheckRequest'
-        description: Facial check request
+  # /face/score/sync:
+  #   post:
+  #     tags:
+  #       - Face API
+  #     summary: calculates facial check score synchronously
+  #     operationId: scoreFacialCheckSync
+  #     description: Calculates Facial Check scores depending on the requested components
+  #     responses:
+  #       '200':
+  #         description: scoring completed
+  #         content:
+  #           application/json:
+  #             schema:
+  #               $ref: '#/components/schemas/FacialCheckSuccessResponse'
+  #       '400':
+  #         description: photo quality is insufficient
+  #         content:
+  #           application/json:
+  #             schema:
+  #               $ref: '#/components/schemas/FacialCheckErrorResponse'
+  #       '403':
+  #         description: 'client is forbidden to access this API or requested components'
+  #       '500':
+  #         description: internal server error
+  #     requestBody:
+  #       content:
+  #         application/json:
+  #           schema:
+  #             $ref: '#/components/schemas/FacialCheckRequest'
+  #       description: Facial check request
 components:
   securitySchemes:
     ApiKeyAuth:
