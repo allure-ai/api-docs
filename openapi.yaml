@@ -125,10 +125,10 @@ components:
               - wrinkle
               - redness
               - oiliness
-              # - face_shape
-              # - undertone
-              # - foundation
-              # - texture_area
+              - face_shape
+              - undertone
+              - foundation
+              - texture_area
     FacialCheckSuccessResponse:
       type: object
       required: 
@@ -152,14 +152,14 @@ components:
               $ref: '#/components/schemas/FacialCheckRednessComponent'
             oiliness:
               $ref: '#/components/schemas/FacialCheckOilinessComponent'
-            # face_shape:
-            #   $ref: '#/components/schemas/FacialCheckFaceShapeComponent'
-            # undertone:
-            #   $ref: '#/components/schemas/FacialCheckUndertoneComponent'
-            # foundation:
-            #   $ref: '#/components/schemas/FacialCheckFoundationComponent'
-            # texture_area:
-            #   $ref: '#/components/schemas/FacialCheckTextureAreaComponent'
+            face_shape:
+              $ref: '#/components/schemas/FacialCheckFaceShapeComponent'
+            undertone:
+              $ref: '#/components/schemas/FacialCheckUndertoneComponent'
+            foundation:
+              $ref: '#/components/schemas/FacialCheckFoundationComponent'
+            texture_area:
+              $ref: '#/components/schemas/FacialCheckTextureAreaComponent'
     FacialCheckErrorResponse:
       type: object
       required: 
