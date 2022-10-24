@@ -159,10 +159,10 @@ components:
               $ref: '#/components/schemas/FacialCheckUndertoneComponent'
             foundation:
               $ref: '#/components/schemas/FacialCheckFoundationComponent'
-            texture_area:
-              $ref: '#/components/schemas/FacialCheckTextureAreaComponent'
             skin_color:
               $ref: '#/components/schemas/FacialCheckSkinColorComponent'
+            texture_area:
+              $ref: '#/components/schemas/FacialCheckTextureAreaComponent'
     FacialCheckErrorResponse:
       type: object
       required: 
@@ -223,6 +223,8 @@ components:
             - "SQUARE"
     FacialCheckUndertoneComponent:
       type: object
+      deprecated: true
+      description: Deprecated in favor of the `skin_color` component
       required: 
         - class
       properties:
@@ -234,6 +236,8 @@ components:
             - "ace:undertone:warm"
     FacialCheckFoundationComponent:
       type: object
+      deprecated: true
+      description: Deprecated in favor of the `skin_color` component
       required: 
         - class
       properties:
@@ -265,10 +269,12 @@ components:
           type: string
         rgb:
           type: array
+          description: Predicted skin color in [R, G, B] format
           example: [244, 121, 102]
           items:
             type: int
         lab:
+          description: Predicted skin color in [L, A, B] format. L value ranges from 0 to 100. A and B values range from -128 to 127.
           type: array
           example: [100, 124.212312, 13.782376]
           items:
