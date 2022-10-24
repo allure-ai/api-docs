@@ -128,6 +128,7 @@ components:
               - face_shape
               - undertone
               - foundation
+              - skin_color
               - texture_area
     FacialCheckSuccessResponse:
       type: object
@@ -160,6 +161,8 @@ components:
               $ref: '#/components/schemas/FacialCheckFoundationComponent'
             texture_area:
               $ref: '#/components/schemas/FacialCheckTextureAreaComponent'
+            skin_color:
+              $ref: '#/components/schemas/FacialCheckSkinColorComponent'
     FacialCheckErrorResponse:
       type: object
       required: 
@@ -249,6 +252,40 @@ components:
             - "ace:foundation:10"
             - "ace:foundation:11"
             - "ace:foundation:12"
+    FacialCheckSkinColorComponent:
+      type: object
+      required: 
+        - hex
+        - rgb
+        - lab
+        - undertone
+        - skintone
+      properties:
+        hex:
+          type: string
+        rgb:
+          type: array
+          example: [244, 121, 102]
+          items:
+            type: int
+        lab:
+          type: array
+          example: [100, 124.212312, 13.782376]
+          items:
+            type: float
+        undertone:
+          type: string
+          enum: 
+            - "ace:undertone:cold"
+            - "ace:undertone:neutral"
+            - "ace:undertone:warm"
+        skintone:
+          type: string
+          enum: 
+            - "ace:skintone:fair"
+            - "ace:skintone:medium"
+            - "ace:skintone:tan"
+            - "ace:skintone:dark"
     FacialCheckTextureAreaComponent:
       type: object
       required:
