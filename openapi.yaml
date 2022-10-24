@@ -267,26 +267,29 @@ components:
       properties:
         hex:
           type: string
+          example: "#D8B4AA"
         rgb:
           type: array
           description: Predicted skin color in [R, G, B] format
-          example: [244, 121, 102]
+          example: [216, 180, 170]
           items:
             type: int
         lab:
           description: Predicted skin color in [L, A, B] format. L value ranges from 0 to 100. A and B values range from -128 to 127.
           type: array
-          example: [100, 124.212312, 13.782376]
+          example: [76.15849970823942, 11.429739306670516, 9.957616714710028]
           items:
             type: float
         undertone:
           type: string
+          example: "ace:undertone:cool"
           enum: 
-            - "ace:undertone:cold"
+            - "ace:undertone:cool"
             - "ace:undertone:neutral"
             - "ace:undertone:warm"
         skintone:
           type: string
+          example: "ace:skintone:medium"
           enum: 
             - "ace:skintone:fair"
             - "ace:skintone:medium"
