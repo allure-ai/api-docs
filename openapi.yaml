@@ -1,7 +1,7 @@
 openapi: 3.0.0
 servers:
   - description: Allure AI Business API
-    url: https://apibusiness.allure.id/v1
+    url: https://apibusiness.allure.id
 info:
   description: This is an API to utilize Allure AI inference engine
   version: "v1"
@@ -12,21 +12,21 @@ paths:
   /facial-check/v1/predict:
     post:
       tags:
-        - Face API
+        - Facial Check API
       summary: calculates facial check score asynchronously
       operationId: scoreFacialCheck
       description: Calculates Facial Check scores depending on the requested components, and calls a webhook to post the result when it is done.
       responses:
-        '201': 
+        "201":
           description: Scoring job created
       requestBody:
         content:
           application/json:
             schema:
               allOf:
-                - $ref: '#/components/schemas/FacialCheckRequest'
+                - $ref: "./schemas/FacialCheckAPI/FacialCheckRequest.yaml"
                 - type: object
-                  required: 
+                  required:
                     - callback_url
                   properties:
                     callback_url:
@@ -35,7 +35,7 @@ paths:
                       example: "https://some-backend-server.example.com/facial-check-webhook"
       callbacks:
         scoringSuccessful:
-          '{$request.body#/callback_url}':
+          "{$request.body#/callback_url}":
             post:
               description: "Facial check scoring job successful"
               requestBody:
@@ -43,12 +43,12 @@ paths:
                 content:
                   application/json:
                     schema:
-                      $ref: '#/components/schemas/FacialCheckSuccessResponse'
+                      $ref: "./schemas/FacialCheckAPI/FacialCheckSuccessResponse.yaml"
               responses:
-                '200': 
+                "200":
                   description: "Your callback returns HTTP 200"
         scoringFailed:
-          '{$request.body#/callback_url}':
+          "{$request.body#/callback_url}":
             post:
               description: "Facial check scoring job failed"
               requestBody:
@@ -56,253 +56,60 @@ paths:
                 content:
                   application/json:
                     schema:
-                      $ref: '#/components/schemas/FacialCheckErrorResponse'
+                      $ref: "./schemas/FacialCheckAPI/FacialCheckErrorResponse.yaml"
               responses:
-                '200': 
+                "200":
                   description: "Your callback returns HTTP 200"
-          
-          
-  # /face/score/sync:
-  #   post:
-  #     tags:
-  #       - Face API
-  #     summary: calculates facial check score synchronously
-  #     operationId: scoreFacialCheckSync
-  #     description: Calculates Facial Check scores depending on the requested components
-  #     responses:
-  #       '200':
-  #         description: scoring completed
-  #         content:
-  #           application/json:
-  #             schema:
-  #               $ref: '#/components/schemas/FacialCheckSuccessResponse'
-  #       '400':
-  #         description: photo quality is insufficient
-  #         content:
-  #           application/json:
-  #             schema:
-  #               $ref: '#/components/schemas/FacialCheckErrorResponse'
-  #       '403':
-  #         description: 'client is forbidden to access this API or requested components'
-  #       '500':
-  #         description: internal server error
-  #     requestBody:
-  #       content:
-  #         application/json:
-  #           schema:
-  #             $ref: '#/components/schemas/FacialCheckRequest'
-  #       description: Facial check request
+
+  /product-suitability/skincare/v2/calculate:
+    post:
+      tags:
+        - Product Suitability API
+      summary: calculates skincare product suitability score asynchronously
+      operationId: calculateSkincareProductSuitabilityScore
+      description: Calculates Skincare Product Suitability scores depending on the user's skin conditions, and calls a webhook to post the result when it is done.
+      responses:
+        "201":
+          description: Scoring job created
+      requestBody:
+        content:
+          application/json:
+            schema:
+              allOf:
+                - $ref: "./schemas/ProductSuitabilityAPI/CalculateSkincareProductSuitabilityScoreRequest.yaml"
+                - type: object
+                  required:
+                    - callback_url
+                  properties:
+                    callback_url:
+                      type: string
+                      format: uri
+                      example: "https://some-backend-server.example.com/skincare-product-suitability-score-webhook"
+
+      callbacks:
+        scoringSuccessful:
+          "{$request.body#/callback_url}":
+            post:
+              description: "Product suitability scoring job successful"
+              requestBody:
+                required: true
+                content:
+                  application/json:
+                    schema:
+                      $ref: "./schemas/ProductSuitabilityAPI/CalculateSkincareProductSuitabilityScoreSuccessResponse.yaml"
+              responses:
+                "200":
+                  description: "Your callback returns HTTP 200"
 components:
   securitySchemes:
     ApiKeyAuth:
       type: apiKey
-      in: header 
+      in: header
       name: X-API-Key
   schemas:
-    FacialCheckRequest:
-      type: object
-      required:
-        - photo_url
-        - components
-      properties:
-        photo_url:
-          type: string
-          format: url
-          example: "http://cdn.allure.id/example/photo.png"
-        visualization_enabled:
-          type: boolean
-          default: false
-          example: true
-        components:
-          type: array
-          example: ["wrinkle", "acne"]
-          items:
-            type: string
-            enum:
-              - dark_circle
-              - darkspot
-              - acne
-              - wrinkle
-              - redness
-              - oiliness
-              - face_shape
-              - undertone
-              - foundation
-              - skin_color
-              - texture_area
-    FacialCheckSuccessResponse:
-      type: object
-      required: 
-        - success
-      properties:
-        success:
-          type: boolean
-          default: true
-        prediction:
-          type: object
-          properties:
-            acne:
-              $ref: '#/components/schemas/FacialCheckAcneComponent'
-            wrinkle:
-              $ref: '#/components/schemas/FacialCheckWrinkleComponent'
-            darkspot:
-              $ref: '#/components/schemas/FacialCheckDarkspotComponent'
-            dark_circle:
-              $ref: '#/components/schemas/FacialCheckDarkCircleComponent'
-            redness:
-              $ref: '#/components/schemas/FacialCheckRednessComponent'
-            oiliness:
-              $ref: '#/components/schemas/FacialCheckOilinessComponent'
-            face_shape:
-              $ref: '#/components/schemas/FacialCheckFaceShapeComponent'
-            undertone:
-              $ref: '#/components/schemas/FacialCheckUndertoneComponent'
-            foundation:
-              $ref: '#/components/schemas/FacialCheckFoundationComponent'
-            skin_color:
-              $ref: '#/components/schemas/FacialCheckSkinColorComponent'
-            texture_area:
-              $ref: '#/components/schemas/FacialCheckTextureAreaComponent'
-    FacialCheckErrorResponse:
-      type: object
-      required: 
-        - success
-      properties:
-        success:
-          type: boolean
-          default: false
-        error:
-          type: string
-          enum:
-            - FACE_NOT_FOUND
-            - PHOTO_BLURRY
-            - PHOTO_NOISY
-            - SUBJECT_NOT_FACING_CAMERA
-            - PHOTO_TOO_BRIGHT
-            - PHOTO_TOO_DARK
-            - SUBJECT_TOO_FAR
-            - FACE_PARTIALLY_SHOWN
-            - UNKNOWN_ERROR
-        description:
-          type: string
-          nullable: true
-    FacialCheckAcneComponent: &numericComponent
-      type: object
-      required: 
-        - score
-      properties:
-        score:
-          type: integer
-        overlay: &overlayProperty
-          type: object
-          description: "Visualization overlay, only exists if visualization_enabled is true"
-          properties:
-            image_b64:
-              type: string
-              format: byte
-            image_type:
-              type: string
-              description: "MIME type of the overlay, typically image/png"
-    FacialCheckWrinkleComponent: *numericComponent
-    FacialCheckDarkspotComponent: *numericComponent
-    FacialCheckDarkCircleComponent: *numericComponent
-    FacialCheckRednessComponent: *numericComponent
-    FacialCheckOilinessComponent: *numericComponent
-    FacialCheckFaceShapeComponent:
-      type: object
-      required: 
-        - class
-      properties:
-        class:
-          type: string
-          enum: 
-            - "HEART"
-            - "OBLONG"
-            - "OVAL"
-            - "ROUND"
-            - "SQUARE"
-    FacialCheckUndertoneComponent:
-      type: object
-      deprecated: true
-      description: Deprecated in favor of the `skin_color` component
-      required: 
-        - class
-      properties:
-        class:
-          type: string
-          enum: 
-            - "ace:undertone:cold"
-            - "ace:undertone:neutral"
-            - "ace:undertone:warm"
-    FacialCheckFoundationComponent:
-      type: object
-      deprecated: true
-      description: Deprecated in favor of the `skin_color` component
-      required: 
-        - class
-      properties:
-        class:
-          type: string
-          enum: 
-            - "ace:foundation:1"
-            - "ace:foundation:2"
-            - "ace:foundation:3"
-            - "ace:foundation:4"
-            - "ace:foundation:5"
-            - "ace:foundation:6"
-            - "ace:foundation:7"
-            - "ace:foundation:8"
-            - "ace:foundation:9"
-            - "ace:foundation:10"
-            - "ace:foundation:11"
-            - "ace:foundation:12"
-    FacialCheckSkinColorComponent:
-      type: object
-      required: 
-        - hex
-        - rgb
-        - lab
-        - undertone
-        - skintone
-      properties:
-        hex:
-          type: string
-          example: "#D8B4AA"
-        rgb:
-          type: array
-          description: Predicted skin color in [R, G, B] format
-          example: [216, 180, 170]
-          items:
-            type: int
-        lab:
-          description: Predicted skin color in [L, A, B] format. L value ranges from 0 to 100. A and B values range from -128 to 127.
-          type: array
-          example: [76.15849970823942, 11.429739306670516, 9.957616714710028]
-          items:
-            type: float
-        undertone:
-          type: string
-          example: "ace:undertone:cool"
-          enum: 
-            - "ace:undertone:cool"
-            - "ace:undertone:neutral"
-            - "ace:undertone:warm"
-        skintone:
-          type: string
-          example: "ace:skintone:medium"
-          enum: 
-            - "ace:skintone:fair"
-            - "ace:skintone:medium"
-            - "ace:skintone:tan"
-            - "ace:skintone:dark"
-    FacialCheckTextureAreaComponent:
-      type: object
-      required:
-        - overlay
-      properties:
-        overlay: *overlayProperty
-        
+
 security:
   - ApiKeyAuth: []
 tags:
-  - name: Face API
+  - name: Facial Check API
+  - name: Product Suitability API

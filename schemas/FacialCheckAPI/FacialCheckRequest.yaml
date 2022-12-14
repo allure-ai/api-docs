@@ -1,0 +1,30 @@
+type: object
+required:
+  - photo_url
+  - components
+properties:
+  photo_url:
+    type: string
+    format: url
+    example: "http://cdn.allure.id/example/photo.png"
+  visualization_enabled:
+    type: boolean
+    default: false
+    example: true
+  components:
+    type: array
+    example: ["wrinkle", "acne"]
+    items:
+      type: string
+      enum:
+        - dark_circle
+        - darkspot
+        - acne
+        - wrinkle
+        - redness
+        - oiliness
+        - face_shape
+        - undertone
+        - foundation
+        - skin_color
+        - texture_area

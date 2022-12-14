@@ -1,0 +1,17 @@
+type: object
+required:
+  - success
+properties:
+  success:
+    type: boolean
+    default: true
+  prediction:
+    type: object
+    description: "Allure Article Number (AAN) is used as the key of the dictionary."
+    example:
+      PSA00000292: 75.0
+      PSA00000293: 73.61111111111111
+      PSA00000295: 44.638888888888886
+    additionalProperties:
+      type: number
+      description: "Suitability score (0 means not suitable, 100 means perfectly suitable)"

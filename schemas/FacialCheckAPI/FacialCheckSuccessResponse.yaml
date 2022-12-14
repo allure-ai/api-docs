@@ -1,0 +1,150 @@
+type: object
+required:
+  - success
+properties:
+  success:
+    type: boolean
+    default: true
+  prediction:
+    type: object
+    properties:
+      acne:
+        $ref: "#/components/schemas/FacialCheckAcneComponent"
+      wrinkle:
+        $ref: "#/components/schemas/FacialCheckWrinkleComponent"
+      darkspot:
+        $ref: "#/components/schemas/FacialCheckDarkspotComponent"
+      dark_circle:
+        $ref: "#/components/schemas/FacialCheckDarkCircleComponent"
+      redness:
+        $ref: "#/components/schemas/FacialCheckRednessComponent"
+      oiliness:
+        $ref: "#/components/schemas/FacialCheckOilinessComponent"
+      face_shape:
+        $ref: "#/components/schemas/FacialCheckFaceShapeComponent"
+      undertone:
+        $ref: "#/components/schemas/FacialCheckUndertoneComponent"
+      foundation:
+        $ref: "#/components/schemas/FacialCheckFoundationComponent"
+      skin_color:
+        $ref: "#/components/schemas/FacialCheckSkinColorComponent"
+      texture_area:
+        $ref: "#/components/schemas/FacialCheckTextureAreaComponent"
+
+components:
+  schemas:
+    FacialCheckAcneComponent: &numericComponent
+      type: object
+      required:
+        - score
+      properties:
+        score:
+          type: integer
+        overlay: &overlayProperty
+          type: object
+          description: "Visualization overlay, only exists if visualization_enabled is true"
+          properties:
+            image_b64:
+              type: string
+              format: byte
+            image_type:
+              type: string
+              description: "MIME type of the overlay, typically image/png"
+    FacialCheckWrinkleComponent: *numericComponent
+    FacialCheckDarkspotComponent: *numericComponent
+    FacialCheckDarkCircleComponent: *numericComponent
+    FacialCheckRednessComponent: *numericComponent
+    FacialCheckOilinessComponent: *numericComponent
+    FacialCheckFaceShapeComponent:
+      type: object
+      required:
+        - class
+      properties:
+        class:
+          type: string
+          enum:
+            - "HEART"
+            - "OBLONG"
+            - "OVAL"
+            - "ROUND"
+            - "SQUARE"
+    FacialCheckUndertoneComponent:
+      type: object
+      deprecated: true
+      description: Deprecated in favor of the `skin_color` component
+      required:
+        - class
+      properties:
+        class:
+          type: string
+          enum:
+            - "ace:undertone:cold"
+            - "ace:undertone:neutral"
+            - "ace:undertone:warm"
+    FacialCheckFoundationComponent:
+      type: object
+      deprecated: true
+      description: Deprecated in favor of the `skin_color` component
+      required:
+        - class
+      properties:
+        class:
+          type: string
+          enum:
+            - "ace:foundation:1"
+            - "ace:foundation:2"
+            - "ace:foundation:3"
+            - "ace:foundation:4"
+            - "ace:foundation:5"
+            - "ace:foundation:6"
+            - "ace:foundation:7"
+            - "ace:foundation:8"
+            - "ace:foundation:9"
+            - "ace:foundation:10"
+            - "ace:foundation:11"
+            - "ace:foundation:12"
+    FacialCheckSkinColorComponent:
+      type: object
+      required:
+        - hex
+        - rgb
+        - lab
+        - undertone
+        - skintone
+      properties:
+        hex:
+          type: string
+          example: "#D8B4AA"
+        rgb:
+          type: array
+          description: Predicted skin color in [R, G, B] format
+          example: [216, 180, 170]
+          items:
+            type: int
+        lab:
+          description: Predicted skin color in [L, A, B] format. L value ranges from 0 to 100. A and B values range from -128 to 127.
+          type: array
+          example: [76.15849970823942, 11.429739306670516, 9.957616714710028]
+          items:
+            type: float
+        undertone:
+          type: string
+          example: "ace:undertone:cool"
+          enum:
+            - "ace:undertone:cool"
+            - "ace:undertone:neutral"
+            - "ace:undertone:warm"
+        skintone:
+          type: string
+          example: "ace:skintone:medium"
+          enum:
+            - "ace:skintone:fair"
+            - "ace:skintone:medium"
+            - "ace:skintone:tan"
+            - "ace:skintone:dark"
+    FacialCheckTextureAreaComponent:
+      type: object
+      required:
+        - overlay
+      properties:
+        overlay: *overlayProperty

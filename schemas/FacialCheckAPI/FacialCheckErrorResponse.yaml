@@ -1,0 +1,22 @@
+type: object
+required:
+  - success
+properties:
+  success:
+    type: boolean
+    default: false
+  error:
+    type: string
+    enum:
+      - FACE_NOT_FOUND
+      - PHOTO_BLURRY
+      - PHOTO_NOISY
+      - SUBJECT_NOT_FACING_CAMERA
+      - PHOTO_TOO_BRIGHT
+      - PHOTO_TOO_DARK
+      - SUBJECT_TOO_FAR
+      - FACE_PARTIALLY_SHOWN
+      - UNKNOWN_ERROR
+  description:
+    type: string
+    nullable: true

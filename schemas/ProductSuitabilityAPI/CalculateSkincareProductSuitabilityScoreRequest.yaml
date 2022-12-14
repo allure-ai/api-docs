@@ -1,0 +1,107 @@
+type: object
+required:
+  - article_no
+  - user
+properties:
+  article_no:
+    type: array
+    description: "Allure Article No (AAN) for the products to analyze."
+    example: ["PSA00000295", "PSA00000294", "PSA00000162"]
+    items:
+      type: string
+  user:
+    type: object
+    required:
+      - oiliness_verdict
+      - sensitivity_verdict
+      - skin_problems_to_solve
+      - budget_min
+      - budget_max
+      - acne_score
+      - wrinkle_score
+      - darkspot_score
+      - dark_circle_score
+    properties:
+      gender:
+        type: string
+        example: MALE
+        enum:
+          - MALE
+          - FEMALE
+          - UNKNOWN
+      date_of_birth:
+        type: string
+        format: date
+        example: "1970-01-01"
+      halal_preference:
+        type: boolean
+        example: true
+      cruelty_free_preference:
+        type: boolean
+        example: true
+      paraben_free_preference:
+        type: boolean
+        example: true
+      pregnant_preference:
+        type: boolean
+        example: false
+      oiliness_verdict:
+        type: string
+        example: OILY
+        enum:
+          - DRY
+          - OILY
+          - NORMAL
+      sensitivity_verdict:
+        type: string
+        example: SENSITIVE
+        enum:
+          - SENSITIVE
+          - RESISTANT
+      skin_problems_to_solve:
+        type: array
+        example: ["FIGHTING_ACNE", "REMOVING_ACNE_MARKS", "SKIN_FEELS_DRY"]
+        items:
+          type: string
+          enum:
+            - BRIGHTENING
+            - FIGHTING_ACNE
+            - FIGHTING_AGING
+            - IMPROVING_SKIN_TEXTURE
+            - REMOVING_ACNE_MARKS
+            - REMOVING_COMEDO
+            - SKIN_FEELS_DRY
+            - SKIN_LOOKS_DULL
+            - SUNLIGHT_PROTECTION
+      budget_min:
+        type: number
+        example: 150000
+        description: "Minimum skincare budget (in IDR)"
+      budget_max:
+        type: number
+        example: 50000
+        description: "Maximum skincare budget (in IDR)"
+      acne_score:
+        type: integer
+        example: 95
+        minimum: 0
+        maximum: 100
+        description: "Acne score value retrieved from Facial Check API"
+      wrinkle_score:
+        type: integer
+        example: 95
+        minimum: 0
+        maximum: 100
+        description: "Wrinkle score value retrieved from Facial Check API"
+      darkspot_score:
+        type: integer
+        example: 95
+        minimum: 0
+        maximum: 100
+        description: "Darkspot score value retrieved from Facial Check API"
+      dark_circle_score:
+        type: integer
+        example: 95
+        minimum: 0
+        maximum: 100
+        description: "Dark circle score value retrieved from Facial Check API"
