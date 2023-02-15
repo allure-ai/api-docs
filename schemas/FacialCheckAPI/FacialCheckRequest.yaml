@@ -2,6 +2,7 @@ type: object
 required:
   - photo_url
   - components
+  - visualization_enabled
 properties:
   photo_url:
     type: string
